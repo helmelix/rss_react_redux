@@ -10,10 +10,7 @@ export default (store) => ({
       /*  Webpack - use require callback to define
           dependencies for bundling   */
       const Channel = require('./containers/channel').default
-
       const reducer = require('./modules/channel').default
-      //const channelReducer1 = require('../Counter/modules/counter').default
-
 
       /*  Add the reducer to the store on key 'counter'  */
       injectReducer(store, { key: 'channel', reducer })

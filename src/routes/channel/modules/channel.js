@@ -87,7 +87,6 @@ export function renewChartData(value) {
   }
 }
 
-/////////////////
 function getLettersRate(strToParse) {
   var div1 = document.createElement("div");
   div1.innerHTML = strToParse;
@@ -106,7 +105,6 @@ function getLettersRate(strToParse) {
     } else otherSymbols++;
   });
   //if (otherSymbols) {lettersRate['other symbols'] = otherSymbols};
-  console.log('lettersRate', lettersRate);
   return lettersRate;
 }
 
