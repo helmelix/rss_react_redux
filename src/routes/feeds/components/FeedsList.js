@@ -8,15 +8,15 @@ class Feeds extends Component {
     this.props.fetchChannels();
   }
 
-    render() {
-    return (
+  render() {
+      return (
 
           <div className="row">
                 <div className="col-md-3 space_left">
                           <h1>feeds</h1>
                           <div>
                             {this.props.channelsList.map(list =>
-                                <li className="list-group-item pointer"
+                                <li className="list-group-item list_pointer"
                                     key={list.id}
                                     onClick={()=>browserHistory.push('/feeds/channel/' + list.id)}>
                                   {list.name}
@@ -45,8 +45,7 @@ class Feeds extends Component {
       )
 
     }
-}
-
+  }
 
 
 

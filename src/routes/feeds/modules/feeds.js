@@ -1,4 +1,4 @@
-import  axios  from 'axios';
+import axios from 'axios';
 // ------------------------------------
 // Constants
 // ------------------------------------
@@ -14,76 +14,92 @@ export const CHANNEL_FETCH = 'CHANNEL_FETCH'
 // ------------------------------------
 // Actions
 // ------------------------------------
-export function selectChannel (channel) {
+export function selectChannel(channel) {
   return {
-    type    : CHANNEL_SELECT,
-    payload : channel
+    type: CHANNEL_SELECT,
+    payload: channel
   }
 }
 
-export function fetchChannels (channels = 'defaaq') {
+export function fetchChannels(channels = 'defaaq') {
   return (dispatch) => {
-          dispatch({
-            type    : CHANNELS_FETCH,
-            payload : 'channels'
-          })
+    dispatch({
+      type: CHANNELS_FETCH,
+      payload: 'channels'
+    })
 
-          return  axios.get('http://54.187.164.175:1338/channels')
-           .then(function (response) {
-                return response.data.data
-           })
-           .then(res => dispatch(getChannels(res)));
+    return axios.get('http://54.187.164.175:1338/channels')
+      .then(function(response) {
+        return response.data.data
+      })
+      .then(res => dispatch(getChannels(res)));
   }
 }
 
-export function getChannels (channels) {
+export function getChannels(channels) {
   return {
-    type    : CHANNELS_GET,
-    payload : channels
+    type: CHANNELS_GET,
+    payload: channels
   }
 }
 
-export function setChannelName (channelName) {
+export function setChannelName(channelName) {
   return {
-    type    : CHANNEL_SET_NAME,
-    payload : channelName
+    type: CHANNEL_SET_NAME,
+    payload: channelName
   }
 }
 
 
-export function addChannel (channel ={id: '', name : '', type: "", url: ""}) {
+export function addChannel(channel = {
+  id: '',
+  name: '',
+  type: "",
+  url: ""
+}) {
   return (dispatch) => {
-  let config = {
-      headers: { 'Content-Type': 'application/vnd.api+json' }
-  };
-  let body = JSON.stringify({data:{attributes:{'name': channel.name, 'url': channel.url}}});
+    let config = {
+      headers: {
+        'Content-Type': 'application/vnd.api+json'
+      }
+    };
+    let body = JSON.stringify({
+      data: {
+        attributes: {
+          'name': channel.name,
+          'url': channel.url
+        }
+      }
+    });
 
 
-  axios.post('http://54.187.164.175:1338/channels', body, config)
-       .then(res => dispatch(fetchChannels()));
+    axios.post('http://54.187.164.175:1338/channels', body, config)
+      .then(res => dispatch(fetchChannels()));
   }
 
 }
 
-export function deleteChannel (channel_id) {
+export function deleteChannel(channel_id) {
   return (dispatch) => {
     let url = 'http://54.187.164.175:1338/channels' + '/' + channel_id
-  let config = {
-      headers: { 'Content-Type': 'application/vnd.api+json' }
-  };
+    let config = {
+      headers: {
+        'Content-Type': 'application/vnd.api+json'
+      }
+    };
 
-  axios.delete(url, config)
-       .then(res => dispatch(fetchChannels()));
+    axios.delete(url, config)
+      .then(res => dispatch(fetchChannels()));
   }
 
 }
 
 
 
-export function addCount (value) {
+export function addCount(value) {
   return {
-    type    : COUNT_ADD,
-    payload : value
+    type: COUNT_ADD,
+    payload: value
   }
 }
 
@@ -99,23 +115,30 @@ export const actions = {
 
 
 const ACTION_HANDLERS = {
-[CHANNEL_ADD]    : (state, action) =>{
-    return {...state};
+  [CHANNEL_ADD]: (state, action) => {
+    return { ...state
+    };
   },
- [CHANNELS_GET]: (state, action) =>{
-     let newMylist = []
-     let channelsAmount = action.payload.length
-     action.payload.forEach((val)=> newMylist.push(val))
-     state = {...state, channelsList: newMylist, channelsCount : channelsAmount}
-     return state;
-},
-[CHANNELS_FETCH]      : (state, action) =>{
-    return {...state}
-},
-[CHANNEL_SELECT]    :(state, action) =>{
-  state = {...state, selectedChannel: action.payload}
-  return state;
-}
+  [CHANNELS_GET]: (state, action) => {
+    let newMylist = []
+    let channelsAmount = action.payload.length
+    action.payload.forEach((val) => newMylist.push(val))
+    state = { ...state,
+      channelsList: newMylist,
+      channelsCount: channelsAmount
+    }
+    return state;
+  },
+  [CHANNELS_FETCH]: (state, action) => {
+    return { ...state
+    }
+  },
+  [CHANNEL_SELECT]: (state, action) => {
+    state = { ...state,
+      selectedChannel: action.payload
+    }
+    return state;
+  }
 
 
 
@@ -127,11 +150,16 @@ const ACTION_HANDLERS = {
 
 const initialState = {
 
- channelsCount: 0,
- channelsList: [{id: '', name : '', type: "channels", url: ""}]
+  channelsCount: 0,
+  channelsList: [{
+    id: '',
+    name: '',
+    type: "channels",
+    url: ""
+  }]
 }
 
-export default function counterReducer (state = initialState, action) {
+export default function counterReducer(state = initialState, action) {
   const handler = ACTION_HANDLERS[action.type]
 
   return handler ? handler(state, action) : state

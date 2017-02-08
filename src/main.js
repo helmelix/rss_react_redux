@@ -9,9 +9,6 @@ import AppContainer from './containers/AppContainer'
 const initialState = window.___INITIAL_STATE__
 const store = createStore(initialState)
 
-store.subscribe(()=>{
-    console.log('store.changed = ',  store.getState())
-})
 
 // ========================================================
 // Render Setup

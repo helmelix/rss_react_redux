@@ -5,27 +5,26 @@ import { browserHistory} from 'react-router'
 
 class Channel extends Component {
 
-  componentWillMount(){
+  componentWillMount() {
     this.props.fetchChannel(this.props.routeParams.channel_id)
-              .then((res)=>{
-                  this.props.fetchChannelNews(res.attributes.url)
-              })
+      .then((res) => {
+        this.props.fetchChannelNews(res.attributes.url)
+      })
 
   }
 
   componentWillReceiveProps(nextProps) {
-    if (!isEqual(this.props.routeParams.channel_id, nextProps.routeParams.channel_id)){
-    this.props.fetchChannel(nextProps.routeParams.channel_id)
-              .then((res)=>{
-                  this.props.fetchChannelNews(res.attributes.url)
-                })
+    if (!isEqual(this.props.routeParams.channel_id, nextProps.routeParams.channel_id)) {
+      this.props.fetchChannel(nextProps.routeParams.channel_id)
+        .then((res) => {
+          this.props.fetchChannelNews(res.attributes.url)
+        })
     }
   }
 
-  componentWillUnmount(){
+  componentWillUnmount() {
     this.props.cleanSelectedData();
   }
-
 
   render() {
     return(
@@ -78,13 +77,13 @@ class Channel extends Component {
                       {this.props.newsAmount ?
                           <div className="space_top">
                                   <div>
-                                      всего каналов: {this.props.channelsCount}
+                                      number of channels: {this.props.channelsCount}
                                   </div>
                                   <div>
-                                      сообщений в канале: {this.props.newsAmount}
+                                      number of messages: {this.props.newsAmount}
                                   </div>
-                                  {!this.props.pieChartData[0] ?<div>не найдено латинских букв</div>
-                                    : <div>частота появления латинских букв</div>}
+                                  {!this.props.pieChartData[0] ?<div>Latin letters not found</div>
+                                    : <div>characters appearance frequency:</div>}
                                   <div>
                                               <PieChart
                                                 data={this.props.pieChartData}

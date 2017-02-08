@@ -15,10 +15,10 @@ function mapStateToProps(state) {
   };
 }
 const mapDispatchToProps = {
-  fetchChannelNews: (url)=> fetchChannelNews(url),
-  fetchChannel: (ch_id)=> fetchChannel(ch_id),
-  selectNews: (news)=> selectNews(news),
-  cleanSelectedData: ()=> cleanSelectedData()
+  fetchChannelNews: (url) => fetchChannelNews(url),
+  fetchChannel: (ch_id) => fetchChannel(ch_id),
+  selectNews: (news) => selectNews(news),
+  cleanSelectedData: () => cleanSelectedData()
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Channel);
