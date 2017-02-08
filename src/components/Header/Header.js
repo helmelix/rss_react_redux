@@ -4,15 +4,9 @@ import './Header.scss'
 
 export const Header = () => (
   <div>
-    <h1 className="text-center">feeds parser</h1>
-
     <IndexLink to='/' activeClassName='route--active'>
-      Home
+      <h1 className="text-center">feeds parser</h1>
     </IndexLink>
-    {' · '}
-    <Link to='/feeds' activeClassName='route--active'>
-      Feeds
-    </Link>
   </div>
 )
 

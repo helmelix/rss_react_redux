@@ -10,7 +10,8 @@ function mapStateToProps(state) {
     selectedChannel: state.channel.selectedChannel,
     selectedNews: state.channel.selectedNews,
     pieChartData: state.channel.pieChartData,
-    newsAmount: state.channel.newsAmount
+    newsAmount: state.channel.newsAmount,
+    parceChannelFail: state.channel.parceChannelFail
   };
 }
 const mapDispatchToProps = {

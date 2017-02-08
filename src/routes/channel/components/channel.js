@@ -1,25 +1,23 @@
 import React, { PropTypes, Component } from 'react';
 import isEqual from 'lodash/isEqual';
-//import rd3 from 'react-d3';
 import { PieChart } from 'react-d3';
 
 
 class Channel extends Component {
 
   componentWillMount(){
-    //console.log('componentWillMount')
     this.props.fetchChannel(this.props.routeParams.channel_id)
-              .then(()=>{
-                  this.props.fetchChannelNews(this.props.selectedChannel.attributes.url)
+              .then((res)=>{
+                  this.props.fetchChannelNews(res.attributes.url)
               })
 
   }
+
   componentWillReceiveProps(nextProps) {
     if (!isEqual(this.props.routeParams.channel_id, nextProps.routeParams.channel_id)){
-    //console.log('nextProps.routeParams.channel_id--------', nextProps.routeParams.channel_id)
     this.props.fetchChannel(nextProps.routeParams.channel_id)
-              .then(()=>{
-                  this.props.fetchChannelNews(this.props.selectedChannel.attributes.url)
+              .then((res)=>{
+                  this.props.fetchChannelNews(res.attributes.url)
                 })
     }
   }
@@ -29,19 +27,23 @@ class Channel extends Component {
   }
 
 
-
-
   render() {
     return(
       <div className="row">
-            <div className="col-md-6 space_top">
+            <div className="col-md-6">
+
                     <div>
+                          <h1 className="lead text-center">{this.props.selectedChannel.attributes.name}</h1>
                           <button className='btn btn-default' onClick={()=>this.props.onDeleteChannel(this.props.routeParams.channel_id)}>
                               Delete Channel
                           </button>
                     </div>
                     <div>
-                        <ul className="list-group">
+                      {this.props.parceChannelFail ? <h4>ошибка получения данных</h4>
+                        : ''}
+                    </div>
+                    <div>
+                        <ul className="list-group ">
                             {this.props.newsList.map(list =>
                                   <li className="list-group-item" key={Math.random()} onClick={()=>this.props.selectNews(list)}>
                                 {list.title}
@@ -52,12 +54,6 @@ class Channel extends Component {
             </div>
             <div className="col-md-6 space_top">
                     <div>
-                        всего каналов: {this.props.channelsCount}
-                    </div>
-                    <div>
-                        сообщений в канале: {this.props.newsAmount}
-                    </div>
-                    <div>
                           {this.props.selectedNews.title ?
                                   <div>
                                       <div>
@@ -66,20 +62,37 @@ class Channel extends Component {
                                       <div dangerouslySetInnerHTML={{
                                           __html: this.props.selectedNews.description
                                           }} />
-
+                                      <div>
+                                        {this.props.selectedNews.pubDate ? this.props.selectedNews.pubDate : ''}
+                                      </div>
                                   </div>
                                 : <div>no news selected</div>
                           }
                     </div>
                     <div>
-                                <PieChart
-                                  data={this.props.pieChartData}
-                                  width={400}
-                                  height={400}
-                                  radius={100}
-                                  innerRadius={20}
-                                  sectorBorderColor="white"
-                                />
+                      {this.props.newsAmount ?
+                          <div className="space_top">
+                                  <div>
+                                      всего каналов: {this.props.channelsCount}
+                                  </div>
+                                  <div>
+                                      сообщений в канале: {this.props.newsAmount}
+                                  </div>
+                                  {!this.props.pieChartData[0] ?<div>не найдено латинских букв</div>
+                                    : <div>частота появления латинских букв</div>}
+                                  <div>
+                                              <PieChart
+                                                data={this.props.pieChartData}
+                                                width={600}
+                                                height={600}
+                                                radius={150}
+                                                innerRadius={20}
+                                                sectorBorderColor="blue"
+                                              />
+                                  </div>
+                            </div>
+                        : <div>no  selected</div>
+                      }
                     </div>
             </div>
       </div>

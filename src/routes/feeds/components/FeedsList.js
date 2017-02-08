@@ -1,22 +1,16 @@
 import React, { PropTypes, Component } from 'react';
 import AddForm from './form'
 import { addChannel, addCount } from '../modules/feeds'
-
 import { browserHistory, Link } from 'react-router'
 
-//import Channel from './channel'
-
-//const FeedsList = ({ feeds, onTodoClick }) => (
 class Feeds extends Component {
   componentDidMount() {
+    console.log('componentDidMount ');
     this.props.fetchChannels();
   }
 
     render() {
-
-
     return (
-
 
           <div className="row">
                 <div className="col-md-3 space_left">
@@ -27,7 +21,6 @@ class Feeds extends Component {
                                     key={list.id}
                                     onClick={()=>browserHistory.push('/feeds/channel/' + list.id)}>
                                   {list.name}
-
 
                                 </li>)
                               }

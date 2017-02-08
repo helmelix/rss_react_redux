@@ -5,11 +5,11 @@ import  axios  from 'axios';
 
 export const CHANNEL_FETCH = 'CHANNEL_FETCH'
 export const CHANNEL_GET_NEWS = 'CHANNEL_GET_NEWS'
+export const CHANNEL_PARSE_FAIL = 'CHANNEL_PARSE_FAIL'
 export const CHANNEL_GET = 'CHANNEL_GET'
 export const CLEAN_SELECTED_CHANNEL = 'CLEAN_SELECTED_CHANNEL'
 export const NEWS_SELECT = 'NEWS_SELECT'
 export const NEWS_CHART_DATA_GET = 'NEWS_CHART_DATA_GET'
-//export const COUNTER_DOUBLE_ASYNC = 'COUNTER_DOUBLE_ASYNC'
 
 // ------------------------------------
 // Actions
@@ -19,25 +19,33 @@ export function fetchChannel (channel_id = '') {
   return (dispatch) => {
     return axios.get('http://54.187.164.175:1338/channels/' + channel_id)
          .then(function (response) {
-            //console.log(response);
             return response.data.data
        })
-       .then(res => dispatch(channelGet(res)))
+       .then(res => {
+          dispatch(channelGet(res))
+          return res
+       })
   }
 }
 
 export function fetchChannelNews (channel_url = '') {
   return (dispatch) => {
-    //let urll = 'http://qz.com/feed/'
     let query = 'select * from rss(0, 100) where url = "' + channel_url + '"';
     let geturl='http://query.yahooapis.com/v1/public/yql?format=json&q=' + encodeURIComponent(query);
-     console.log('channel_url ', channel_url);
     axios.get(geturl)
          .then(function (response) {
-            //console.log('response',  response.data.query.results.item);
-            return response.data.query.results.item
+              return response.data.query.results.item
          })
-         .then(res => dispatch(addNews(res)));
+         .then(res => dispatch(addNews(res)))
+         .catch(function (error) {
+             dispatch(channelParceFail())
+         })
+  }
+}
+
+export function channelParceFail () {
+  return {
+    type    : CHANNEL_PARSE_FAIL
   }
 }
 
@@ -80,7 +88,10 @@ export function renewChartData (value) {
 }
 
 /////////////////
-function getLettersRate(str){
+function getLettersRate(strToParse){
+    var div1 = document.createElement("div");
+    div1.innerHTML = strToParse;
+    var str = div1.textContent || div1.innerText || "";
     function compareNumbers(a, b) {
         return a - b;
     }
@@ -94,7 +105,7 @@ function getLettersRate(str){
                }
           else otherSymbols++;
     });
-    if (otherSymbols) {lettersRate['other symbols'] = otherSymbols};
+    //if (otherSymbols) {lettersRate['other symbols'] = otherSymbols};
     console.log('lettersRate', lettersRate);
     return lettersRate;
 }
@@ -113,37 +124,30 @@ export const actions = {
 
 const ACTION_HANDLERS = {
     [CHANNEL_FETCH]      : (state, action) =>{
-      //console.log('CHANNEL_FETCH !!!!!');
        return {...state}
     },
     [CHANNEL_GET_NEWS]      :(state, action) =>{
       let news = []
       let newsCount = getNewsAmount(action.payload)
-
       action.payload.forEach((val)=> news.push(val))
-
-      state = {...state, newsList: news, newsAmount: newsCount}
-
+      state = {...state, newsList: news, newsAmount: newsCount, parceChannelFail: false}
       return state},
-      [CHANNEL_GET] :(state, action) =>{
+    [CHANNEL_GET] :(state, action) =>{
           state = {...state, selectedChannel: action.payload}
           return state;
      },
      [NEWS_SELECT]  :(state, action) =>{
-          console.log('NEWS_SELECT', action.payload);
          state = {...state, selectedNews: action.payload}
          return state;
     },
     [CLEAN_SELECTED_CHANNEL]:(state, action) => {
-      alert('qwe')
       return {...initialState}},
 
     [NEWS_CHART_DATA_GET]:(state, action) =>{
-        console.log('NEWS_CHART_DATA_GET', action.payload);
         let letters = action.payload
         let newLetterData = [];
         function compareNumbers(a, b) {
-              return a.key - b.key;
+              return b.value - a.value;
         }
         for (var letter in letters) {
             newLetterData.push({
@@ -154,6 +158,10 @@ const ACTION_HANDLERS = {
         newLetterData.sort(compareNumbers);
         state = {...state, pieChartData: newLetterData}
         return state;
+      },
+      [CHANNEL_PARSE_FAIL]  :(state, action) =>{
+        let chan = {...state.selectedChannel}
+          return {...initialState, selectedChannel: chan, parceChannelFail: true}
       }
 }
 
@@ -162,13 +170,17 @@ const ACTION_HANDLERS = {
 // ------------------------------------
 
 const initialState = {
+  parceChannelFail: false,
   newsAmount: 0,
   pieChartData: [],
   selectedNews: {
       title:'',
       attributes:{url:''}
     },
- selectedChannel: {},
+ selectedChannel: {
+   attributes:{
+     name:''
+   }},
  newsList: [{
    title: '',
    description: '',
@@ -178,8 +190,6 @@ const initialState = {
 
 export default function channelReducer (state = initialState, action) {
   const handler = ACTION_HANDLERS[action.type]
-  //console.log('handler' + handler);
-//  console.log('state', state);
 
   return handler ? handler(state, action) : state
 }

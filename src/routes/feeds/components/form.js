@@ -1,18 +1,15 @@
 import React from 'react'
 import { connect } from 'react-redux'
-//import { addTodo } from '../actions'
 
-//let AddTodo = ({onAddName, dispatch }) => {
 let AddForm = ({addNewChannel,bar, dispatch}) => {
   let input
   let inputurl
-  //let AddName={onAddName}
-//  AddName()
+
   return (
-    <div>
+    <div className="space_top ">
       <form onSubmit={e => {
         e.preventDefault()
-        if (!input.value.trim()) {
+        if (!input.value.trim()||!inputurl.value.trim()) {
           return
         }
         addNewChannel({url: inputurl.value, name : input.value})
@@ -20,19 +17,19 @@ let AddForm = ({addNewChannel,bar, dispatch}) => {
         inputurl.value = ''
       }}>
         <div className="form-group" >
-            <label for="name">Name</label>
-            <input id="name" ref={node => {
+            <label htmlFor="name"  >Name</label>
+            <input className="form-control" id="name" ref={node => {
                 input = node
               }} />
         </div>
-        <div className="form-group" >
-            <label for="url">Url</label>
-            <input ref={node => {
+        <div className="form-group " >
+            <label htmlFor="url">Url</label>
+            <input className="form-control" id="url" ref={node => {
               inputurl = node
             }} />
         </div>
         <div className="form-group" >
-            <button type="submit">
+            <button type="submit" className="btn btn-default">
               Add Channel
             </button>
         </div>
