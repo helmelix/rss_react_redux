@@ -1,7 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import isEqual from 'lodash/isEqual';
 import { PieChart } from 'react-d3';
-
+import { browserHistory} from 'react-router'
 
 class Channel extends Component {
 
@@ -31,26 +31,31 @@ class Channel extends Component {
     return(
       <div className="row">
             <div className="col-md-6">
-
                     <div>
                           <h1 className="lead text-center">{this.props.selectedChannel.attributes.name}</h1>
-                          <button className='btn btn-default' onClick={()=>this.props.onDeleteChannel(this.props.routeParams.channel_id)}>
+                          <div className="space_bot">
+                          <button className='btn btn-default' onClick={()=>{this.props.onDeleteChannel(this.props.routeParams.channel_id)
+                                          browserHistory.push('/feeds/')
+                                    }}>
                               Delete Channel
                           </button>
+                          </div>
                     </div>
-                    <div>
-                      {this.props.parceChannelFail ? <h4>ошибка получения данных</h4>
-                        : ''}
-                    </div>
+                    {!this.props.parceChannelFail ?
+
+
                     <div>
                         <ul className="list-group ">
                             {this.props.newsList.map(list =>
-                                  <li className="list-group-item" key={Math.random()} onClick={()=>this.props.selectNews(list)}>
+                                  <li className="list-group-item list_pointer" key={Math.random()} onClick={()=>this.props.selectNews(list)}>
                                 {list.title}
                               </li>)
                           }
                         </ul>
                     </div>
+
+                    : <h4>Error receiving data</h4>}
+
             </div>
             <div className="col-md-6 space_top">
                     <div>
@@ -66,7 +71,7 @@ class Channel extends Component {
                                         {this.props.selectedNews.pubDate ? this.props.selectedNews.pubDate : ''}
                                       </div>
                                   </div>
-                                : <div>no news selected</div>
+                                : <div></div>
                           }
                     </div>
                     <div>
@@ -91,7 +96,7 @@ class Channel extends Component {
                                               />
                                   </div>
                             </div>
-                        : <div>no  selected</div>
+                        : <div></div>
                       }
                     </div>
             </div>

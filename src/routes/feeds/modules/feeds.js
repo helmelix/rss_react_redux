@@ -30,7 +30,6 @@ export function fetchChannels (channels = 'defaaq') {
 
           return  axios.get('http://54.187.164.175:1338/channels')
            .then(function (response) {
-                console.log(response.data.data);
                 return response.data.data
            })
            .then(res => dispatch(getChannels(res)));
@@ -45,7 +44,6 @@ export function getChannels (channels) {
 }
 
 export function setChannelName (channelName) {
-  console.log(channel);
   return {
     type    : CHANNEL_SET_NAME,
     payload : channelName
@@ -105,7 +103,6 @@ const ACTION_HANDLERS = {
     return {...state};
   },
  [CHANNELS_GET]: (state, action) =>{
-     console.log('action.payload', action.payload);
      let newMylist = []
      let channelsAmount = action.payload.length
      action.payload.forEach((val)=> newMylist.push(val))
@@ -113,7 +110,6 @@ const ACTION_HANDLERS = {
      return state;
 },
 [CHANNELS_FETCH]      : (state, action) =>{
-    console.log('CHANNELS_FETCH')
     return {...state}
 },
 [CHANNEL_SELECT]    :(state, action) =>{

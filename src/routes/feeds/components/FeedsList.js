@@ -5,7 +5,6 @@ import { browserHistory, Link } from 'react-router'
 
 class Feeds extends Component {
   componentDidMount() {
-    console.log('componentDidMount ');
     this.props.fetchChannels();
   }
 

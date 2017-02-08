@@ -25,8 +25,9 @@ body {
   margin-bottom: 5px;
 }
 
-.space_left {
-	margin-left: 5px;
+.space_bot {
+	margin-left: 30px;
+  margin-bottom: 5px;
 }
 
 .space_top {
@@ -36,4 +37,8 @@ body {
 .scroll{
     max-height: 300px;
     overflow-y:scroll;
+}
+
+.list_pointer {
+  cursor: pointer;
 }
