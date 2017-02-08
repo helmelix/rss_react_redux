@@ -6,6 +6,7 @@ import  axios  from 'axios';
 export const CHANNEL_FETCH = 'CHANNEL_FETCH'
 export const CHANNEL_GET_NEWS = 'CHANNEL_GET_NEWS'
 export const CHANNEL_GET = 'CHANNEL_GET'
+export const CLEAN_SELECTED_CHANNEL = 'CLEAN_SELECTED_CHANNEL'
 export const NEWS_SELECT = 'NEWS_SELECT'
 export const NEWS_CHART_DATA_GET = 'NEWS_CHART_DATA_GET'
 //export const COUNTER_DOUBLE_ASYNC = 'COUNTER_DOUBLE_ASYNC'
@@ -64,6 +65,13 @@ export function selectNews (value) {
   }
 }
 
+export function cleanSelectedData (value) {
+  return {
+    type    : CLEAN_SELECTED_CHANNEL,
+    payload : value
+  }
+}
+
 export function renewChartData (value) {
   return {
     type    : NEWS_CHART_DATA_GET,
@@ -91,7 +99,9 @@ function getLettersRate(str){
     return lettersRate;
 }
 
-
+function getNewsAmount(str){
+      return str.length
+}
 
 export const actions = {
   fetchChannel
@@ -107,11 +117,12 @@ const ACTION_HANDLERS = {
        return {...state}
     },
     [CHANNEL_GET_NEWS]      :(state, action) =>{
-      //console.log('CHANNEL_SELECT !!!!!1111', action.type);
       let news = []
+      let newsCount = getNewsAmount(action.payload)
+
       action.payload.forEach((val)=> news.push(val))
-      //console.log('CHANNELS_GET action.payload  ', action.payload);
-      state = {...state, newsList: news}
+
+      state = {...state, newsList: news, newsAmount: newsCount}
 
       return state},
       [CHANNEL_GET] :(state, action) =>{
@@ -123,6 +134,10 @@ const ACTION_HANDLERS = {
          state = {...state, selectedNews: action.payload}
          return state;
     },
+    [CLEAN_SELECTED_CHANNEL]:(state, action) => {
+      alert('qwe')
+      return {...initialState}},
+
     [NEWS_CHART_DATA_GET]:(state, action) =>{
         console.log('NEWS_CHART_DATA_GET', action.payload);
         let letters = action.payload
@@ -147,6 +162,7 @@ const ACTION_HANDLERS = {
 // ------------------------------------
 
 const initialState = {
+  newsAmount: 0,
   pieChartData: [],
   selectedNews: {
       title:'',

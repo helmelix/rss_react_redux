@@ -22,8 +22,8 @@ const mapStateToProps = (state) => {
 }
 */
 const mapStateToProps = (state, ownProps) => ({
-  feeds : state.feeds,
-  selectedChannel: state.feeds.mylist[0]
+  channelsList : state.feeds.channelsList,
+  channelsCount: state.feeds.channelsCount
   //mylist : state.feeds.mylist, //[{name: 'nnna'}, {name: 'nnaqna'}],//state.myList
 })
 /*

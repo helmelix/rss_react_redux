@@ -138,14 +138,16 @@ const ACTION_HANDLERS = {
 //  [CHANNEL_ADD]    : (state, action) => {...state, action.payload},
 [CHANNEL_ADD]    : (state, action) =>{
     let newChannel = {name: action.payload, id : Math.random()}
-    let newMylist =  state.mylist.concat(newChannel)
+    let newMylist =  state.channelsList.concat(newChannel)
     return state;
   },
  [COUNT_ADD]      : handleaddCount,
  [CHANNELS_GET]: (state, action) =>{
+      console.log('action.payload', action.payload);
      let newMylist = []
+     let channelsAmount = action.payload.length
      action.payload.forEach((val)=> newMylist.push(val))
-     state = {...state, mylist: newMylist}
+     state = {...state, channelsList: newMylist, channelsCount : channelsAmount}
      return state;
 },
 [CHANNELS_FETCH]      : (state, action) =>{console.log('CHANNELS_FETCH')},
@@ -163,9 +165,9 @@ const ACTION_HANDLERS = {
 // ------------------------------------
 
 const initialState = {
- count: 0,
- selectedChannel: '',
- mylist: [{id: 'qwf', name : '1112312', type: "channels", url: "http://qz.com/feed/"}]
+
+ channelsCount: 0,
+ channelsList: [{id: '', name : '', type: "channels", url: ""}]
 }
 
 export default function counterReducer (state = initialState, action) {
